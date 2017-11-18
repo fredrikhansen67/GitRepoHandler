@@ -20,11 +20,13 @@ public class GitRepo {
         String path="C://aaa/git/";
         String gitURI = "https://github.com/fredrikhansen67/Algorithmens.git";
         LOG.log(Level.INFO, "Started");
+        Helper repo = new Helper();
+        repo.createNewRepository();
 
-        Git.cloneRepository()
-                .setURI(gitURI)
-                .setDirectory(new File("C://aaa//git//repo//"))
-                .call();
+//        Git.cloneRepository()
+//                .setURI(gitURI)
+//                .setDirectory(new File("C://aaa//git//repo//"))
+//                .call();
 //        File localPath = File.createTempFile(path+"TestGitRepository", "");
 //        if(!localPath.delete()) {
 //            throw new IOException("Could not delete temporary file " + localPath);

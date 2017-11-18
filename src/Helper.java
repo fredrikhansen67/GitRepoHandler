@@ -23,23 +23,31 @@ public class Helper {
 
     public static Repository createNewRepository() throws IOException {
         // prepare a new folder
-        String path = "C:"+File.separator+"aaa"+File.separator+"git";
-        String workingDirectory = System.getProperty("user.dir");
+        String path = "C:"+File.separator+"aaa"+File.separator+"git2"+File.separator+"mytest";
+        //String workingDirectory = System.getProperty("user.dir");
         //File localPath = File.createTempFile("KAlaset", "");
         //File localPath = File.createTempFile("TestGitRepository", "");
-        File localPath = File.createTempFile("tempo", "txt", new File(path));
-        if(!localPath.delete()) {
-            LOG.log(Level.INFO, "*** Kunde inte deleta ***");
-            throw new IOException("Could not delete temporary file " + localPath);
-        }
+        //File localPath = File.createTempFile("repo", "", new File(path));
+        try{
+            deleteRecursive(new File(path));
+        }catch(Exception e){}
 
-        LOG.log(Level.INFO, " ### localPath :"+localPath+"\n"+workingDirectory+"\n");
+        LOG.log(Level.INFO, " ### localPath :"+path+"\n");
         // create the
 
-        Repository repository = FileRepositoryBuilder.create(new File(localPath, ".git"));
+        Repository repository = FileRepositoryBuilder.create(new File(path, ".git"));
         repository.create();
 
         return repository;
+    }
+    public static void deleteRecursive(File fileOrDirectory) {
+        try {
+            if (fileOrDirectory.isDirectory())
+                for (File child : fileOrDirectory.listFiles())
+                    deleteRecursive(child);
+
+            fileOrDirectory.delete();
+        }catch(Exception e){throw e;}
     }
 
 }
