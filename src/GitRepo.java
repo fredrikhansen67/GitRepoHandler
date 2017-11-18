@@ -1,12 +1,8 @@
-import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.apache.commons.io.FileUtils;
 
 /**
  * Created by fredrik on 2017-11-17.
@@ -20,7 +16,7 @@ public class GitRepo {
         String path="C://aaa/git/";
         String gitURI = "https://github.com/fredrikhansen67/Algorithmens.git";
         LOG.log(Level.INFO, "Started");
-        Helper repo = new Helper();
+        RepoManager repo = new RepoManager();
         repo.createNewRepository();
 
 //        Git.cloneRepository()

@@ -16,7 +16,7 @@ public class Log {
 
     @SuppressWarnings("unused")
     public static void main(String[] args) throws IOException, GitAPIException {
-        try (Repository repository = Helper.openJGitRepository()) {
+        try (Repository repository = RepoManager.openJGitRepository()) {
             try (Git git = new Git(repository)) {
                 Iterable<RevCommit> logs = git.log()
                         .call();

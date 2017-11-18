@@ -17,7 +17,7 @@ public class CommitAll {
 
     public static void main(String[] args) throws IOException, GitAPIException {
         // prepare a new test-repository
-        try (Repository repository = Helper.createNewRepository()) {
+        try (Repository repository = RepoManager.createNewRepository()) {
             try (Git git = new Git(repository)) {
                 // create the file
                 File myfile = new File(repository.getDirectory().getParent(), "testfile");

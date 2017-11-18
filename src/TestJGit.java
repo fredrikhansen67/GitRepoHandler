@@ -11,30 +11,130 @@ import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.lib.Repository;
 
 import org.eclipse.jgit.transport.*;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.lang.annotation.Repeatable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TestJGit {
+    private static final Logger LOG = Logger.getLogger(TestJGit.class.getName());
 
     private String localPath, remotePath;
     private Repository localRepo;
     private Git git;
+    private String user;
+    private String password;
 
-    @Before
-    public void init() throws IOException {
-        //localPath = "/home/me/repos/mytest";
-        localPath = "C:\\aaa\\git\\mytest\\";
-        remotePath = "https://github.com/fredrikhansen67/Algorithmens.git";
-        //remotePath = "git@github.com:me/mytestrepo.git";
-        localRepo = new FileRepository(localPath + ".git");
-        git = new Git(localRepo);
+//    public TestJGit(){
+//        user = JOptionPane.showInputDialog("Enter username");
+//        password = JOptionPane.showInputDialog("Enter password");
+//    }
+
+
+    public void getCredentials() {
+        JLabel label_login = new JLabel("Username:");
+        JTextField login = new JTextField();
+
+        JLabel label_password = new JLabel("Password:");
+        JPasswordField password = new JPasswordField();
+        Object[] array = {label_login, login, label_password, password};
+
+        int res = JOptionPane.showConfirmDialog(null, array, "Login",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE);
+
+        if (res == JOptionPane.OK_OPTION) {
+            System.out.println("username: " + login.getText().trim());
+            System.out.println("password: " + new String(password.getPassword()));
+        }
     }
 
-    /*@Test
+        @Before
+        public void init ()throws IOException{
+            //localPath = "/home/me/repos/mytest";
+            localPath = "C:\\aaa\\git\\mytest\\";
+            remotePath = "https://github.com/fredrikhansen67/Algorithmens.git";
+            localRepo = new FileRepository(localPath + ".git");
+            //getCredentials();
+            git = new Git(localRepo);
+        }
+
+    @Test
+    public void testClone() throws IOException, GitAPIException {
+        File cat = new File("C:\\aaa\\git\\mytest");
+        try {
+            LOG.log(Level.INFO, "Removing old files...");
+            deleteRecursive(cat);
+            LOG.log(Level.INFO,"DELETING "+ cat.exists());
+        } catch (Exception x) {
+            LOG.log(Level.SEVERE, "Failed to remove repo");
+            System.err.println(x);
+        }
+        if(cat.exists())
+            deleteRecursive(cat);
+        Git git = Git.cloneRepository()
+                .setURI(remotePath)
+                .setCredentialsProvider(new UsernamePasswordCredentialsProvider("fredrikhansen67", "11texas11"))
+                .setDirectory(new File(localPath))
+                .call();
+
+        //Git.cloneRepository().setURI(remotePath).setDirectory(new File(localPath)).call();
+    }
+    @Ignore
+    @Test
+    public void testAdd() throws IOException, GitAPIException {
+        File myfile = new File(localPath + "/myfile");
+        myfile.createNewFile();
+        git.add().addFilepattern("myfile").call();
+    }
+    @Ignore
+    @Test
+    public void testCommit() throws IOException, GitAPIException,
+            JGitInternalException {
+        git.commit().setMessage("Added myfile").call();
+    }
+
+    @Ignore
+    @Test
+    public void testTrackMaster() throws IOException, JGitInternalException,
+            GitAPIException {
+        git.branchCreate().setName("master")
+                .setUpstreamMode(SetupUpstreamMode.SET_UPSTREAM)
+                .setStartPoint("origin/master").setForce(true).call();
+    }
+
+    @Ignore
+    @Test
+    public void testPull() throws IOException, GitAPIException {
+        git.pull().call();
+    }
+
+    @Ignore
+    @Test
+    public void testCreate() throws IOException {
+        try {
+            deleteRecursive(new File(localPath));
+        } catch (Exception x) {
+            System.err.println(x);
+        }
+
+        Repository newRepo = new FileRepository(localPath + ".git");
+        newRepo.create();
+    }
+
+    @Ignore
+    @Test
+    public void testPush() throws IOException, JGitInternalException,
+                GitAPIException {
+            git.push().call();
+    }
+
+    @Ignore
+    @Test
     public void testCloneSSH() throws IOException, GitAPIException {
         final String REMOTE_URL = "git@github.com:fredrikhansen67/Algorithmens.git";
         SshSessionFactory sshSessionFactory = new JschConfigSessionFactory() {
@@ -71,71 +171,11 @@ public class TestJGit {
                 .call()) {
             System.out.println("Having repository: " + result.getRepository().getDirectory());
         }
-    }*/
-
-
-    @Test
-    public void testClone() throws IOException, GitAPIException {
-        try {
-            deleteRecursive(new File(localPath));
-        } catch (Exception x) {
-            System.err.println(x);
-        }
-        //"https://github.com/eclipse/jgit.git"
-        Git git = Git.cloneRepository()
-                .setURI(remotePath)
-                .setCredentialsProvider(new UsernamePasswordCredentialsProvider("fredrikhansen67", "11texas11"))
-                .setDirectory(new File(localPath))
-                .call();
-
-        //Git.cloneRepository().setURI(remotePath).setDirectory(new File(localPath)).call();
     }
 
-    @Test
-    public void testAdd() throws IOException, GitAPIException {
-        File myfile = new File(localPath + "/myfile");
-        myfile.createNewFile();
-        git.add().addFilepattern("myfile").call();
-    }
-
-    @Test
-    public void testCommit() throws IOException, GitAPIException,
-            JGitInternalException {
-        git.commit().setMessage("Added myfile").call();
-    }
-
-
-    @Test
-    public void testTrackMaster() throws IOException, JGitInternalException,
-            GitAPIException {
-        git.branchCreate().setName("master")
-                .setUpstreamMode(SetupUpstreamMode.SET_UPSTREAM)
-                .setStartPoint("origin/master").setForce(true).call();
-    }
-
-    @Test
-    public void testPull() throws IOException, GitAPIException {
-        git.pull().call();
-    }
-    /*   @Test
-    public void testCreate() throws IOException {
-        try {
-            deleteRecursive(new File(localPath));
-        } catch (Exception x) {
-            System.err.println(x);
-        }
-
-        Repository newRepo = new FileRepository(localPath + ".git");
-        newRepo.create();
-    }*/
-    /*
-        @Test
-        public void testPush() throws IOException, JGitInternalException,
-                GitAPIException {
-            git.push().call();
-        }*/
     void deleteRecursive(File fileOrDirectory) {
         try {
+           // LOG.log(Level.INFO, "delete :"+fileOrDirectory.getName()+" path:" + fileOrDirectory.getAbsolutePath());
             if (fileOrDirectory.isDirectory())
                 for (File child : fileOrDirectory.listFiles())
                     deleteRecursive(child);

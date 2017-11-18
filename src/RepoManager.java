@@ -9,9 +9,9 @@ import java.util.logging.Logger;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
-public class Helper {
+public class RepoManager {
 
-    private static final Logger LOG = Logger.getLogger( Helper.class.getName() );
+    private static final Logger LOG = Logger.getLogger( RepoManager.class.getName() );
 
     public static Repository openJGitRepository() throws IOException {
         FileRepositoryBuilder builder = new FileRepositoryBuilder();

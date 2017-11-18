@@ -20,7 +20,7 @@ public class CreateAndDeleteTag {
 
     public static void main(String[] args) throws IOException, GitAPIException {
         // prepare test-repository
-        try (Repository repository = Helper.openJGitRepository()) {
+        try (Repository repository = RepoManager.openJGitRepository()) {
             try (Git git = new Git(repository)) {
                 // remove the tag before creating it
                 git.tagDelete().setTags("tag_for_testing").call();

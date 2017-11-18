@@ -17,7 +17,7 @@ public class AddFile {
     public static void main(String[] args) throws IOException, GitAPIException {
         // prepare a new test-repository
         String path = "C:\\aaa\\git\\";
-        try (Repository repository = Helper.createNewRepository()) {
+        try (Repository repository = RepoManager.createNewRepository()) {
             try (Git git = new Git(repository)) {
                 // create the file
                 File myfile = new File(repository.getDirectory().getParent(), "testfile");

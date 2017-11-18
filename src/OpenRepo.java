@@ -35,7 +35,7 @@ public class OpenRepo{
     }
 
     private static File createSampleGitRepo() throws IOException, GitAPIException {
-        try (Repository repository = Helper.createNewRepository()) {
+        try (Repository repository = RepoManager.createNewRepository()) {
             System.out.println("Temporary repository at " + repository.getDirectory());
 
             // create the file
